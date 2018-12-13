@@ -1,0 +1,31 @@
+{
+  "name": "payfast-api",
+  "version": "1.0.0",
+  "description": "Project from course 'NodeJS e HTTP'",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EricDosReis/payfast-api.git"
+  },
+  "keywords": [
+    "nodejs",
+    "http",
+    "rest-api",
+    "studies",
+    "course",
+    "alura"
+  ],
+  "author": "Eric dos Reis <ericdosreis.personal@gmail.com> (https://github.com/EricDosReis)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EricDosReis/payfast-api/issues"
+  },
+  "homepage": "https://github.com/EricDosReis/payfast-api#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
