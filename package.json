@@ -12,6 +12,7 @@
     "url": "git+https://github.com/EricDosReis/payfast-api.git"
   },
   "keywords": [
+    "javascript",
     "nodejs",
     "http",
     "rest-api",
