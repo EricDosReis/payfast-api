@@ -1,8 +1,11 @@
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
+const app = express();
 
-const routes = require('./routes/payment');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+const routes = require('./routes/index');
 
 routes(app);
 
