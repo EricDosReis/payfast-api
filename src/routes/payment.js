@@ -3,36 +3,58 @@ const db = require('../config/database');
 
 module.exports = (app) => {
    app.post('/payment', (req, res) => {
-    const PaymentDao = new PaymentDao(db);
+    const paymentDao = new PaymentDao(db);
 
-    PaymentDao
+    req
+      .assert('type', 'Type is required')
+      .notEmpty();
+
+    req
+      .assert('value', 'Type is required')
+      .notEmpty();
+
+    req
+      .assert('value', 'Value must be float')
+      .isFloat();
+
+    const errors = req.validatorErrors();
+
+    if (errors) {
+      res
+        .status(400)
+        .send(errors);
+
+      return;
+    }
+
+    paymentDao
       .add(req.body)
       .then(() => res.status(201).end())
       .catch(console.error);
   });
 
   app.put('/payment', (req, res) => {
-    const PaymentDao = new PaymentDao(db);
+    const paymentDao = new PaymentDao(db);
 
-    PaymentDao
+    paymentDao
       .update(req.body)
       .then(() => res.status(200).end())
       .catch(console.error);
   });
 
   app.delete('/payment/:id', (req, res) => {
-    const PaymentDao = new PaymentDao(db);
+    const paymentDao = new PaymentDao(db);
 
-    PaymentDao
+    paymentDao
       .delete(req.params.id)
       .then(() => res.status(200).end())
       .catch(console.error);
   });
 
   app.get('/payment', (req, res) => {
-    const PaymentDao = new PaymentDao(db);
+    const paymentDao = new PaymentDao(db);
 
-    PaymentDao
+    paymentDao
       .getAll()
       .then(payments => {
 
@@ -41,9 +63,9 @@ module.exports = (app) => {
   });
 
   app.get('/payment/:id', (req, res) => {
-    const PaymentDao = new PaymentDao(db);
+    const paymentDao = new PaymentDao(db);
 
-    PaymentDao
+    paymentDao
       .getOne(req.params.id)
       .then(payment => {
 

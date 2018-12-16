@@ -4,6 +4,7 @@ const db = new sqlite3.Database('data.db');
 const PAYMENT_SCHEMA = `
   CREATE TABLE IF NOT EXISTS payment (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL,
     value REAL NOT NULL
   )
 `;
