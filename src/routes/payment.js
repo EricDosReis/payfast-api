@@ -23,14 +23,17 @@ module.exports = (app) => {
       res
         .status(400)
         .send(errors);
-
-      return;
     }
 
     paymentDao
       .add(req.body)
-      .then(() => res.status(201).end())
-      .catch(console.error);
+      .then(() => {
+
+        // TODO location
+        res.location('/payment/:id');
+        res.status(201).json(req.body);
+      })
+      .catch(res.status(500).send);
   });
 
   app.put('/payment', (req, res) => {
@@ -39,7 +42,7 @@ module.exports = (app) => {
     paymentDao
       .update(req.body)
       .then(() => res.status(200).end())
-      .catch(console.error);
+      .catch(res.status(500).send);
   });
 
   app.delete('/payment/:id', (req, res) => {
@@ -48,7 +51,7 @@ module.exports = (app) => {
     paymentDao
       .delete(req.params.id)
       .then(() => res.status(200).end())
-      .catch(console.error);
+      .catch(res.status(500).send);
   });
 
   app.get('/payment', (req, res) => {
@@ -59,7 +62,7 @@ module.exports = (app) => {
       .then(payments => {
 
       })
-      .catch(console.error);
+      .catch(res.status(500).send);
   });
 
   app.get('/payment/:id', (req, res) => {
@@ -70,6 +73,6 @@ module.exports = (app) => {
       .then(payment => {
 
       })
-      .catch(console.error);
+      .catch(res.status(500).send);
   });
 }

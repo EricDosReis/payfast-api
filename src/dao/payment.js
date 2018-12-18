@@ -13,10 +13,8 @@ module.exports = class paymentDao {
           value
         ],
         error => {
-          if (error) {
-            console.error(error);
-            return reject('Could not add the payment');
-          }
+          if (error)
+            return reject(error);
 
           return resolve();
         }
@@ -35,10 +33,8 @@ module.exports = class paymentDao {
           id
         ],
         error => {
-          if (error) {
-            console.error(error);
-            return reject('Could not update the payment');
-          }
+          if (error)
+            return reject(error);
 
           return resolve();
         }
@@ -52,10 +48,8 @@ module.exports = class paymentDao {
         'SELECT * FROM payment WHERE id = ?',
         id,
         (error, result) => {
-          if (error) {
-            console.error(error);
-            return reject('Could not execute the payment query');
-          }
+          if (error)
+            return reject(error);
 
           return resolve(result[0]);
         }
@@ -68,10 +62,8 @@ module.exports = class paymentDao {
       this._db.all(
         'SELECT * FROM payment',
         (error, payments) => {
-          if (error) {
-            console.error(error);
-            return reject('Could not execute the payment query');
-          }
+          if (error)
+            return reject(error);
 
           return resolve(payments);
         }
@@ -88,10 +80,8 @@ module.exports = class paymentDao {
         id
         ,
         error => {
-          if (error) {
-            console.error(error);
-            return reject('Could not delete the payment');
-          }
+          if (error)
+            return reject(error);
 
           return resolve();
         });
