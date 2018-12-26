@@ -1,78 +1,14 @@
-const PaymentDao = require('../dao/payment');
-const db = require('../config/database');
+const PaymentController = require('../controllers/payment');
+const paymentController = new PaymentController();
 
 module.exports = (app) => {
-   app.post('/payment', (req, res) => {
-    const paymentDao = new PaymentDao(db);
+  app.post('/payment', paymentController.create);
 
-    req
-      .assert('type', 'Type is required')
-      .notEmpty();
+  app.put('/payment/:id', paymentController.update);
 
-    req
-      .assert('value', 'Type is required')
-      .notEmpty();
+  app.delete('/payment/:id', paymentController.delete);
 
-    req
-      .assert('value', 'Value must be float')
-      .isFloat();
+  app.get('/payment', paymentController.findAll);
 
-    const errors = req.validatorErrors();
-
-    if (errors) {
-      res
-        .status(400)
-        .send(errors);
-    }
-
-    paymentDao
-      .add(req.body)
-      .then(() => {
-
-        // TODO location
-        res.location('/payment/:id');
-        res.status(201).json(req.body);
-      })
-      .catch(res.status(500).send);
-  });
-
-  app.put('/payment', (req, res) => {
-    const paymentDao = new PaymentDao(db);
-
-    paymentDao
-      .update(req.body)
-      .then(() => res.status(200).end())
-      .catch(res.status(500).send);
-  });
-
-  app.delete('/payment/:id', (req, res) => {
-    const paymentDao = new PaymentDao(db);
-
-    paymentDao
-      .delete(req.params.id)
-      .then(() => res.status(200).end())
-      .catch(res.status(500).send);
-  });
-
-  app.get('/payment', (req, res) => {
-    const paymentDao = new PaymentDao(db);
-
-    paymentDao
-      .getAll()
-      .then(payments => {
-
-      })
-      .catch(res.status(500).send);
-  });
-
-  app.get('/payment/:id', (req, res) => {
-    const paymentDao = new PaymentDao(db);
-
-    paymentDao
-      .getOne(req.params.id)
-      .then(payment => {
-
-      })
-      .catch(res.status(500).send);
-  });
+  app.get('/payment/:id', paymentController.findOne);
 }

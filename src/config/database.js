@@ -5,7 +5,9 @@ const PAYMENT_SCHEMA = `
   CREATE TABLE IF NOT EXISTS payment (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     type TEXT NOT NULL,
-    value REAL NOT NULL
+    value REAL NOT NULL,
+    currency TEXT NOT NULL,
+    description TEXT
   )
 `;
 

@@ -3,34 +3,40 @@ module.exports = class paymentDao {
     this._db = db;
   }
 
-  add({ value }) {
+  add({ type, value, currency, description }) {
     return new Promise((resolve, reject) => {
+
       this._db.run(`
         INSERT INTO payment (
-          value
-        ) VALUES (?)
+          type,
+          value,
+          currency,
+          description
+        ) VALUES (?, ?, ?, ?)
         `, [
-          value
+          type, value, currency, description
         ],
-        error => {
+        function(error) {
           if (error)
             return reject(error);
 
-          return resolve();
+          return resolve(this.lastID);
         }
       );
     });
   }
 
-  update({ id, value }) {
+  update({ id, type, value, currency, description }) {
     return new Promise((resolve, reject) => {
       this._db.run(`
         UPDATE payment SET
+          type = ?,
           value = ?,
+          currency = ?,
+          description = ?
         WHERE id = ?
-        `, [
-          value,
-          id
+        `, [ 
+          type, value, currency, description, id
         ],
         error => {
           if (error)
@@ -42,7 +48,21 @@ module.exports = class paymentDao {
     });
   }
 
-  getOne(id) {
+  findAll() {
+    return new Promise((resolve, reject) => {
+      this._db.all(
+        'SELECT * FROM payment',
+        (error, payments) => {
+          if (error)
+            return reject(error);
+
+          return resolve(payments || []);
+        }
+      );
+    });
+  }
+
+  findOne(id) {
     return new Promise((resolve, reject) => {
       this._db.all(
         'SELECT * FROM payment WHERE id = ?',
@@ -51,21 +71,7 @@ module.exports = class paymentDao {
           if (error)
             return reject(error);
 
-          return resolve(result[0]);
-        }
-      );
-    });
-  }
-
-  getAll() {
-    return new Promise((resolve, reject) => {
-      this._db.all(
-        'SELECT * FROM payment',
-        (error, payments) => {
-          if (error)
-            return reject(error);
-
-          return resolve(payments);
+          return resolve(result[0] || {});
         }
       );
     });
@@ -73,18 +79,16 @@ module.exports = class paymentDao {
 
   delete(id) {
     return new Promise((resolve, reject) => {
-      this._db.run(`
-        DELETE FROM payment
-        WHERE id = ?
-      `,
-        id
-        ,
+      this._db.run(
+        'DELETE FROM payment WHERE id = ?',
+        id,
         error => {
           if (error)
             return reject(error);
 
           return resolve();
-        });
+        }
+      );
     });
   }
 }
