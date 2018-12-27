@@ -7,6 +7,7 @@ const PAYMENT_SCHEMA = `
     type TEXT NOT NULL,
     value REAL NOT NULL,
     currency TEXT NOT NULL,
+    status TEXT NOT NULL,
     description TEXT
   )
 `;

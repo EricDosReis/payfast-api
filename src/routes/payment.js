@@ -1,14 +1,24 @@
 const PaymentController = require('../controllers/payment');
 const paymentController = new PaymentController();
 
-module.exports = (app) => {
-  app.post('/payment', paymentController.create);
+module.exports = function(app) {
+  app.post('/payment', (req, res) => {
+    paymentController.create(req, res);
+  });
 
-  app.put('/payment/:id', paymentController.update);
+  app.put('/payment/:id', (req, res) => {
+    paymentController.confirm(req, res);
+  });
 
-  app.delete('/payment/:id', paymentController.delete);
+  app.delete('/payment/:id', (req, res) => {
+    paymentController.cancel(req, res);
+  });
 
-  app.get('/payment', paymentController.findAll);
+  app.get('/payment', (req, res) => {
+    paymentController.findAll(req, res);
+  });
 
-  app.get('/payment/:id', paymentController.findOne);
+  app.get('/payment/:id', (req, res) => {
+    paymentController.findOne(req, res);
+  });
 }

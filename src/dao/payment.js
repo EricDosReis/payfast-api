@@ -1,20 +1,19 @@
+const sqlUtils = require('../utils/sql');
+
 module.exports = class paymentDao {
   constructor(db) {
-    this._db = db;
+    this._db = db;    
   }
 
-  add({ type, value, currency, description }) {
+  create(payment) {
     return new Promise((resolve, reject) => {
 
       this._db.run(`
         INSERT INTO payment (
-          type,
-          value,
-          currency,
-          description
-        ) VALUES (?, ?, ?, ?)
+          ${sqlUtils.prepareInsert(payment)}
+        ) VALUES (?, ?, ?, ?, ?)
         `, [
-          type, value, currency, description
+          ...Object.values(payment)
         ],
         function(error) {
           if (error)
@@ -26,23 +25,22 @@ module.exports = class paymentDao {
     });
   }
 
-  update({ id, type, value, currency, description }) {
+  update(id, payment) {
     return new Promise((resolve, reject) => {
+      delete payment.id;
+
       this._db.run(`
         UPDATE payment SET
-          type = ?,
-          value = ?,
-          currency = ?,
-          description = ?
+          ${sqlUtils.prepareUpdate(payment)}
         WHERE id = ?
         `, [ 
-          type, value, currency, description, id
+          ...Object.values(payment), id
         ],
         error => {
           if (error)
             return reject(error);
 
-          return resolve();
+          return resolve(payment);
         }
       );
     });
@@ -52,11 +50,11 @@ module.exports = class paymentDao {
     return new Promise((resolve, reject) => {
       this._db.all(
         'SELECT * FROM payment',
-        (error, payments) => {
+        (error, results) => {
           if (error)
             return reject(error);
 
-          return resolve(payments || []);
+          return resolve(results || []);
         }
       );
     });
