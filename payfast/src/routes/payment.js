@@ -1,7 +1,7 @@
 const PaymentController = require('../controllers/payment');
 const paymentController = new PaymentController();
 
-module.exports = function(app) {
+module.exports = (app) => {
   app.post('/payment', (req, res) => {
     paymentController.create(req, res);
   });

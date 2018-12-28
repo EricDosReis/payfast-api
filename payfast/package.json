@@ -1,7 +1,7 @@
 {
-  "name": "payfast-api",
+  "name": "payfast",
   "version": "1.0.0",
-  "description": "Project from course 'NodeJS e HTTP'",
+  "description": "Payment API",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EricDosReis/payfast-api.git"
+    "url": "git+https://github.com/EricDosReis/shopfast-api.git"
   },
   "keywords": [
     "javascript",
@@ -23,9 +23,9 @@
   "author": "Eric dos Reis <ericdosreis.personal@gmail.com> (https://github.com/EricDosReis)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/EricDosReis/payfast-api/issues"
+    "url": "https://github.com/EricDosReis/shopfast-api/issues"
   },
-  "homepage": "https://github.com/EricDosReis/payfast-api#readme",
+  "homepage": "https://github.com/EricDosReis/shopfast-api#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
