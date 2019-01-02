@@ -1,4 +1,5 @@
 const PaymentDao = require('../dao/payment');
+const cardService = require('../services/card');
 const db = require('../config/database');
 
 module.exports = class PaymentController {
@@ -14,15 +15,14 @@ module.exports = class PaymentController {
 
     const payment = req.body;
 
-    this._paymentDao
-      .create(payment)
-      .then((id) => {
-        payment.status = 'CREATED';
+    if (payment.type === 'card')
+      this._paymentWithCard(res, payment);
 
-        res.location(`/payment/${id}`);
-        res.status(201).json({ id, ...payment });
-      })
-      .catch(error => res.status(500).send(error));
+    else if (payment.type === 'payfast')
+      this._paymentWithPayFast(res, payment);
+
+    else
+      res.status(400).send(this._paymentTypeErrorMessage());
   }
 
   confirm(req, res) {
@@ -77,6 +77,61 @@ module.exports = class PaymentController {
       .findOne(req.params.id)
       .then(payment => res.status(200).json(payment))
       .catch(error => res.status(500).send(error));
+  }
+
+  _paymentWithCard(res, payment) {
+    cardService.authorize(payment.card)
+      .then((data) => {
+        if (data.status === 'AUTHORIZED') {
+          delete payment.card;
+
+          return this._paymentDao.create(payment);
+        }
+      })
+      .then((id) => {
+        this._onCreate(res, payment, id);
+      })
+      .catch(error => res.status(500).send(error));
+  }
+
+  _paymentWithPayFast(res, payment) {
+    delete payment.card;
+
+    this._paymentDao
+      .create(payment)
+      .then((id) => {
+        this._onCreate(res, payment, id);
+      })
+      .catch(error => res.status(500).send(error));
+  }
+
+  _onCreate(res, payment, id) {
+    const links = [
+      {
+        href: `http://localhost:3000/payment/${id}`,
+        rel: 'CONFIRM',
+        method: 'PUT',
+      },
+      {
+        href: `http://localhost:3000/payment/${id}`,
+        rel: 'CANCEL',
+        method: 'DELETE',
+      }
+    ];
+
+    res.location(`/payment/${id}`);
+    res.status(201).json({ id, ...payment, links });
+  }
+
+  _paymentTypeErrorMessage() {
+    return [
+      {
+        "location": "body",
+        "param": "type",
+        "msg": "Type must be 'card' or 'payfast'",
+        "value": payment.type,
+      },
+    ];
   }
 
   _validateRequest(req) {
