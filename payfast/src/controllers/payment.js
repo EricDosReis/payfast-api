@@ -106,14 +106,16 @@ module.exports = class PaymentController {
   }
 
   _onCreate(res, payment, id) {
+    const href = `http://localhost:3000/payment/${id}`;
+
     const links = [
       {
-        href: `http://localhost:3000/payment/${id}`,
+        href,
         rel: 'CONFIRM',
         method: 'PUT',
       },
       {
-        href: `http://localhost:3000/payment/${id}`,
+        href,
         rel: 'CANCEL',
         method: 'DELETE',
       }
