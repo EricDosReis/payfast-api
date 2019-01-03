@@ -42,6 +42,30 @@
 			"response": []
 		},
 		{
+			"name": "http://localhost:3000/delivery/14801167",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/delivery/14801167",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"delivery",
+						"14801167"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "http://localhost:3000/payment",
 			"request": {
 				"method": "GET",
